@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const refreshBtn = document.getElementById('refresh-btn');
     const refreshIcon = document.getElementById('refresh-icon');
     const exportCsvBtn = document.getElementById('export-csv-btn');
+    const themeToggleCheckbox = document.getElementById('theme-toggle-checkbox');
     const lastSyncEl = document.getElementById('last-sync');
     const searchInput = document.getElementById('search-input');
     const searchClearBtn = document.getElementById('search-clear-btn');
@@ -41,6 +42,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyTweetBtn = document.getElementById('copy-tweet-btn');
     const postTweetBtn = document.getElementById('post-tweet-btn');
     const toast = document.getElementById('toast');
+
+    // Theme Initializer
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    if (currentTheme === 'light') {
+        document.body.classList.add('light-theme');
+        themeToggleCheckbox.checked = true;
+    }
+
+    // Theme Toggle Handler
+    themeToggleCheckbox.addEventListener('change', (e) => {
+        if (e.target.checked) {
+            document.body.classList.add('light-theme');
+            localStorage.setItem('theme', 'light');
+        } else {
+            document.body.classList.remove('light-theme');
+            localStorage.setItem('theme', 'dark');
+        }
+    });
 
     // Load initial data
     fetchNotes(false);

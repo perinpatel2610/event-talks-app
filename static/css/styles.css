@@ -1050,3 +1050,218 @@ body {
         width: 100%;
     }
 }
+
+/* --- Light Theme Variables & Toggle Switch --- */
+.theme-switch-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    padding: 0.4rem 0.8rem;
+    border-radius: 30px;
+    height: 38px;
+}
+
+.theme-icon {
+    color: var(--text-muted);
+    transition: var(--transition-fast);
+}
+
+.theme-switch {
+    position: relative;
+    display: inline-block;
+    width: 36px;
+    height: 20px;
+}
+
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.theme-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #334155;
+    transition: var(--transition-normal);
+    border-radius: 20px;
+}
+
+.theme-slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #ffffff;
+    transition: var(--transition-normal);
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+input:checked + .theme-slider {
+    background-color: var(--accent-cyan);
+}
+
+input:checked + .theme-slider:before {
+    transform: translateX(16px);
+}
+
+/* Active Icons state based on theme selection */
+body:not(.light-theme) .moon-icon {
+    color: var(--accent-purple);
+    filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.4));
+}
+
+body.light-theme .sun-icon {
+    color: #f59e0b;
+    filter: drop-shadow(0 0 4px rgba(245, 158, 17, 0.4));
+}
+
+/* Light Theme Variables Overrides */
+body.light-theme {
+    --bg-primary: #f8fafc;
+    --bg-surface: rgba(255, 255, 255, 0.75);
+    --bg-surface-hover: rgba(255, 255, 255, 0.9);
+    --bg-surface-solid: #ffffff;
+    
+    --border-color: rgba(15, 23, 42, 0.08);
+    --border-color-hover: rgba(15, 23, 42, 0.16);
+    
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-muted: #64748b;
+
+    /* Badges */
+    --badge-general-bg: rgba(71, 85, 105, 0.08);
+    --badge-general-text: #475569;
+    --badge-general-border: rgba(71, 85, 105, 0.25);
+}
+
+/* Light Theme Adjustments */
+body.light-theme .glow-orb {
+    opacity: 0.06;
+}
+
+body.light-theme .stat-card {
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+}
+
+body.light-theme .release-card {
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+}
+
+body.light-theme .controls-bar {
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+}
+
+body.light-theme #search-input {
+    background: #ffffff;
+    border-color: rgba(15, 23, 42, 0.12);
+}
+
+body.light-theme .filter-tag {
+    background: rgba(15, 23, 42, 0.03);
+}
+
+body.light-theme .filter-tag:hover {
+    background: rgba(15, 23, 42, 0.06);
+}
+
+body.light-theme .card-btn {
+    background: rgba(15, 23, 42, 0.03);
+}
+
+body.light-theme .card-btn:hover {
+    background: rgba(15, 23, 42, 0.08);
+    color: var(--text-primary);
+}
+
+body.light-theme .card-body code {
+    background: #e2e8f0;
+    color: #0f172a;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme .card-body pre {
+    background: #f1f5f9;
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+body.light-theme .card-body pre code {
+    color: #0f172a;
+}
+
+body.light-theme .modal-content {
+    background: #ffffff;
+    border-color: rgba(15, 23, 42, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+body.light-theme .selected-note-preview {
+    background: #f8fafc;
+    border-color: rgba(15, 23, 42, 0.08);
+}
+
+body.light-theme .style-tabs {
+    background: #f1f5f9;
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme .style-tab.active {
+    background: #ffffff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+body.light-theme #tweet-textarea {
+    background: #f8fafc;
+    border-color: rgba(15, 23, 42, 0.12);
+    color: #0f172a;
+}
+
+body.light-theme .modal-footer {
+    background: #f8fafc;
+}
+
+body.light-theme .btn-secondary {
+    background: rgba(15, 23, 42, 0.03);
+    border-color: rgba(15, 23, 42, 0.08);
+}
+
+body.light-theme .btn-secondary:hover {
+    background: rgba(15, 23, 42, 0.07);
+}
+
+body.light-theme .last-sync-tag {
+    background: rgba(15, 23, 42, 0.03);
+}
+
+body.light-theme .theme-switch-container {
+    background: rgba(15, 23, 42, 0.03);
+}
+
+body.light-theme .loading-state, 
+body.light-theme .error-state, 
+body.light-theme .empty-state {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+body.light-theme .skeleton-card {
+    background: linear-gradient(90deg, 
+        rgba(226, 232, 240, 0.6) 25%, 
+        rgba(241, 245, 249, 0.8) 37%, 
+        rgba(226, 232, 240, 0.6) 63%
+    );
+    background-size: 400% 100%;
+}
+
