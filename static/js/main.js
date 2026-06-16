@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
     const refreshBtn = document.getElementById('refresh-btn');
     const refreshIcon = document.getElementById('refresh-icon');
+    const exportCsvBtn = document.getElementById('export-csv-btn');
     const lastSyncEl = document.getElementById('last-sync');
     const searchInput = document.getElementById('search-input');
     const searchClearBtn = document.getElementById('search-clear-btn');
@@ -48,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     refreshBtn.addEventListener('click', () => fetchNotes(true));
     errorRetryBtn.addEventListener('click', () => fetchNotes(true));
     clearFiltersBtn.addEventListener('click', resetSearchAndFilters);
+    exportCsvBtn.addEventListener('click', exportToCSV);
     
     // Search event with instant filter
     searchInput.addEventListener('input', (e) => {
@@ -273,6 +275,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             <line x1="10" y1="14" x2="21" y2="3"></line>
                         </svg>
                     </button>
+                    <button class="card-btn copy-btn" title="Copy Note to Clipboard">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </button>
                     <button class="card-btn tweet-btn" title="Create X/Tweet Post">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
@@ -284,6 +292,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${note.description}
             </div>
         `;
+
+        // Event for Copy button
+        card.querySelector('.copy-btn').addEventListener('click', () => {
+            const plainText = formatDescriptionForTweet(note.description);
+            navigator.clipboard.writeText(plainText)
+                .then(() => showToast('Note copied to clipboard!'))
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    showToast('Failed to copy note', true);
+                });
+        });
 
         // Event for Share button
         card.querySelector('.tweet-btn').addEventListener('click', () => openTweetModal(note));
@@ -405,6 +424,54 @@ document.addEventListener('DOMContentLoaded', () => {
             postTweetBtn.style.pointerEvents = 'auto';
             postTweetBtn.style.opacity = '1';
         }
+    }
+
+    // Export currently visible/filtered notes to CSV
+    function exportToCSV() {
+        const filtered = allNotes.filter(note => {
+            const matchesCategory = activeCategory === 'all' || note.category === activeCategory;
+            const matchesSearch = !searchQuery || 
+                note.date.toLowerCase().includes(searchQuery) ||
+                note.category.toLowerCase().includes(searchQuery) ||
+                note.description.toLowerCase().includes(searchQuery);
+            return matchesCategory && matchesSearch;
+        });
+
+        if (filtered.length === 0) {
+            showToast('No notes to export', true);
+            return;
+        }
+
+        // CSV Rows Header
+        const csvRows = [['Date', 'Category', 'Description', 'Link']];
+
+        filtered.forEach(note => {
+            // Convert HTML to clean plain text description and escape double quotes
+            const cleanDesc = formatDescriptionForTweet(note.description)
+                .replace(/"/g, '""');
+            csvRows.push([
+                `"${note.date}"`,
+                `"${note.category}"`,
+                `"${cleanDesc}"`,
+                `"${note.link}"`
+            ]);
+        });
+
+        const csvContent = csvRows.map(row => row.join(",")).join("\n");
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        
+        const timestamp = new Date().toISOString().slice(0, 10);
+        link.setAttribute("href", url);
+        link.setAttribute("download", `bigquery_release_notes_${timestamp}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        
+        link.click();
+        
+        document.body.removeChild(link);
+        showToast('Exported CSV successfully!');
     }
 
     // Sync Post Url with Twitter/X web intent
